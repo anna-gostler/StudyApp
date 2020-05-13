@@ -1,0 +1,84 @@
+
+***** route through app *****
+frontend > pages (renders UI)
+contains
+frontend > components (parts of UI)
+frontend > assets > service (sends post/get/... to server) (registered in plugins > services.js)
+
+[frontend > middleware: the rest/business logic; run before rendering pages]
+
+backend > controller (maps request from frontend to methods)
+calls
+backend > service (sends requests to repository)
+calls
+backend > repository (retrieves data from database)
+*****************************
+
+***** heroku commands *****
+docker login -u _ -p 52dd3032-0b1c-4cd2-969c-64fb7ddcc6e8 registry.heroku.com
+docker build --file=frontend/frontend.dockerfile --no-cache --rm=true -t registry.heroku.com/demo-playground-app-frontend/web .
+docker build --file=backend/backend.dockerfile --no-cache --rm=true -t registry.heroku.com/demo-playground-app-backend/web .
+docker push registry.heroku.com/demo-playground-app-frontend/web
+docker push registry.heroku.com/demo-playground-app-backend/web
+heroku container:release web -a demo-playground-app-frontend
+heroku container:release web -a demo-playground-app-backend
+
+***************************
+
+****** testing local ******
+backend: gradle build
+
+docker build --file=backend/backend.dockerfile  -t demo-web-backend .
+docker build --file=frontend/frontend.dockerfile  -t demo-web-frontend .
+docker-compose -f docker-compose.yml up
+
+docker build --file=frontend/frontend.dockerfile --no-cache -t demo-web-frontend .
+docker build --file=backend/backend.dockerfile --no-cache -t demo-web-backend .
+docker-compose -f docker-compose.yml up
+
+remove exited containers
+docker ps -a -f status=exited
+show images
+docker images -a
+docker rmi image-name
+"C:\Users\anna_\Documents\Java\StudyApp\remove-docker-stuff.bat"
+will remove most stuff (including db image ... which destroys data... sooo be careful)
+***************************
+
+****** fill database ******
+docker-compose -f docker-compose-backend-dev.yml up
+in frontend
+node node-js-mongodb-connection.js 
+***************************
+
+installed extension cosmos db
+left panel > azure > cosmos db> attached database
+deleted database x)
+- try to give the fcking database a new name and remove the old db
+docker-compose -f docker-compose.yml up --remove-orphans  --force-recreate --build -d playground-web-database
+
+
+*** remove images
+show and set image-name to id
+docker images -a
+docker rmi image-name 
+
+**** custom queries *****
+in VocabService call vocabRepository.customMethod("string");
+VocabRepository customMethod (abstract) implemented in VocabRepositoryImpl
+
+*** gradlew
+in backendfolder open cmd
+gradlew.bat
+gradlew clean build
+or
+gradlew jar
+
+*** push to git
+git commit -m "first commit"
+git remote add origin https://github.com/anna-gostler/StudyApp.git
+git push -u origin master
+
+
+
+

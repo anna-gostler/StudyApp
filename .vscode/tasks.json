@@ -1,0 +1,24 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "gradle",
+			"id": "c:\\Users\\anna_\\Documents\\Java\\DemotasksDemo",
+			"script": "tasks",
+			"description": "Displays the tasks runnable from root project 'Demo'.",
+			"group": "help",
+			"project": "Demo",
+			"buildFile": "C:\\Users\\anna_\\Documents\\Java\\Demo\\build.gradle",
+			"rootProject": "Demo",
+			"path": "",
+			"projectFolder": "c:\\Users\\anna_\\Documents\\Java\\Demo",
+			"workspaceFolder": "c:\\Users\\anna_\\Documents\\Java\\Demo",
+			"args": "",
+			"javaDebug": false,
+			"problemMatcher": [
+				"$gradle"
+			],
+			"label": "gradle: tasks"
+		}
+	]
+}

@@ -1,0 +1,21 @@
+version: '3'
+services:
+  playground-web-database:
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_DATABASE: vocabdb
+    ports:
+      - 27017:27017
+  playground-web-frontend:
+    image: demo-web-frontend:latest
+    environment:
+      PORT: 3000
+      PROXY_API: http://playground-web-backend:8080/
+    ports:
+      - 3000:3000
+  playground-web-backend:
+    image: demo-web-backend:latest
+    environment:
+      MONGODB_URI: mongodb://playground-web-database:27017/vocabdb
+    ports:
+      - 8080:8080

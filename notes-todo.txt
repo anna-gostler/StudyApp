@@ -1,0 +1,33 @@
+(check: do not add vocab already in currentVocabs)
+=> fill currentVocabs as many seen as there are due (max minreapeated), rest: unseen
+
+--> upload to github/heroku
+--> remove todos
+--> remove unnecessary files
+
+
+>> dev = false in websecurity configuration
+
+>> upload to github + heroku link
+
+
+front vocabservice: moveforward:
+if (! v.isNew){
+currentRepeatedWords --;
+}
+
+ref: https://web.dev/promises/
+
+in some lines of frontend vocab service its duedate in others dueDate why? (one retrieved from database? different formats also)
+weird: addDate in serverresponse (http://localhost:8080/api/vocab/randomunseen)
+not visible in cosmos db (via azure button in left panel)
+
+fix font file too large
+is it downloaded all the time??
+
+
+nice to have
+overview
+filter by progress, duedate
+info: elements in set
+settings: new per day, total in set how much new/repeat

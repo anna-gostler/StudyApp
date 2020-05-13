@@ -1,0 +1,23 @@
+https://mongoosejs.com/docs/index.html
+in frontend
+npm install mongoose
+
+C:\Users\anna_\Documents\Java\StudyApp\frontend\node_modules\mongodb\lib\topologies\server.js
+C:\Users\anna_\Documents\Java\StudyApp\frontend\node_modules\mongodb\lib\core\topologies\server.js
+is not called :/
+
+does nothing -_-
+
+C:\Users\anna_\Documents\Java\StudyApp\frontend\node-js-mongodb-connection.js
+in frontend folder run:
+node node-js-mongodb-connection.js 
+
+the files above (at least .. core/ ...) are called with node commmand to node-js-mongodb-connection.js
+....
+
+works :)
+but will it work on heroku??
+
+in frontend
+npm install jsdom
+npm install got

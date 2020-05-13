@@ -1,0 +1,95 @@
+Deploying Our Front- & Backend In The Cloud
+
+deploy our web application in the cloud. 
+I wanted to specifically find a way to run the application in the cloud for free 
+(for a limited number of hours each month). 
+Heroku offers exactly this and makes it easy to deploy our docker containers.
+
+To complete this and the next tutorial you will need a free Heroku account.
+
+I will quickly go over the basics of how Heroku works:
+
+An app runs on Dynos
+
+There three dyno configurations
+    Web → "Web dynos are dynos of the “web” process type that is defined in your Procfile. Only web dynos receive HTTP traffic from the routers."
+    Worker → "Worker dynos can be of any process type declared in your Procfile, other than “web”. Worker dynos are typically used for background jobs, queueing systems, and timed jobs. You can have multiple kinds of worker dynos in your application. For example, one for urgent jobs and another for long-running jobs. For more information, see Worker Dynos, Background Jobs and Queueing."
+    One-off → One-off dynos are temporary dynos that can run detached, or with their input/output attached to your local terminal. They’re loaded with your latest release. They can be used to handle administrative tasks, such as database migrations and console sessions. They can also be used to run occasional background work, as with Heroku Scheduler. For more information, see One-Off Dynos.
+
+While each app can have multiple dynos, they all run the same program within each configuration. 
+If you have more than one web dyno, heroku will distribute the requests between them
+
+With a free account you can run dynos for 450 hours for free 
+(additional 550 hours if you add your credit card, without being charged) 
+
+Free dynos will (with the exception of workers) will also fall asleep after being idle for 30 minutes, 
+this way you don't have to worry about your free dyno hours
+
+Heroku Set-Up
+
+If you look into the docker-compose.yml file we created in the last tutorial, you will see that we have three apps/services.
+
+A database
+The backend
+The frontend
+
+To run our application on heroku we will
+
+    create an heroku application for our backend, that will run a web dyno (as it receives http requests)
+    add a mongodb to our backend app
+    create a heroku application for our frontend, that will run a web dyno (as it receives http requests)
+
+Create the Heroku Frontend & Backend Application
+
+create account
+frontend: heroku dashboard, click "new" and create new application
+Give your application a unique name for the frontend, choose a region and create the app. 
+
+backend: heroku dashboard, click "new" and create new application
+Click on "configure add-ons" and type in the search bar. 
+Select "mLab MongoDB" and the free sandbox plan. 
+https://elements.heroku.com/addons/mongolab
+click on app > resources > add-ons
+
+Build & Deploy Apps
+
+in projects root folder
+
+without comments
+docker login -u _ -p 52dd3032-0b1c-4cd2-969c-64fb7ddcc6e8 registry.heroku.com
+docker build --file=frontend/frontend.dockerfile --rm=true -t registry.heroku.com/demo-playground-app-frontend/web .
+docker build --file=backend/backend.dockerfile --rm=true -t registry.heroku.com/demo-playground-app-backend/web .
+docker push registry.heroku.com/demo-playground-app-frontend/web
+docker push registry.heroku.com/demo-playground-app-backend/web
+heroku container:release web -a demo-playground-app-frontend
+heroku container:release web -a demo-playground-app-backend
+
+without comments no cache
+docker login -u _ -p 52dd3032-0b1c-4cd2-969c-64fb7ddcc6e8 registry.heroku.com
+docker build --file=frontend/frontend.dockerfile --no-cache --rm=true -t registry.heroku.com/demo-playground-app-frontend/web .
+docker build --file=backend/backend.dockerfile --no-cache --rm=true -t registry.heroku.com/demo-playground-app-backend/web .
+docker push registry.heroku.com/demo-playground-app-frontend/web
+docker push registry.heroku.com/demo-playground-app-backend/web
+heroku container:release web -a demo-playground-app-frontend
+heroku container:release web -a demo-playground-app-backend
+
+only backend
+docker login -u _ -p 52dd3032-0b1c-4cd2-969c-64fb7ddcc6e8 registry.heroku.com
+docker build --file=backend/backend.dockerfile --no-cache --rm=true -t registry.heroku.com/demo-playground-app-backend/web .
+docker push registry.heroku.com/demo-playground-app-backend/web
+heroku container:release web -a demo-playground-app-backend
+
+only frontend
+docker login -u _ -p 52dd3032-0b1c-4cd2-969c-64fb7ddcc6e8 registry.heroku.com
+docker build --file=frontend/frontend.dockerfile --no-cache --rm=true -t registry.heroku.com/demo-playground-app-frontend/web .
+docker push registry.heroku.com/demo-playground-app-frontend/web
+heroku container:release web -a demo-playground-app-frontend
+
+delete image id
+docker images 
+docker rmi --force 'image id'
+
+see logs
+heroku logs 
+get 200 lines
+heroku logs -n -a demo-playground-app-frontend 200
