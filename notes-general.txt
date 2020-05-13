@@ -75,8 +75,8 @@ or
 gradlew jar
 
 *** push to git
+git add .
 git commit -m "first commit"
-git remote add origin https://github.com/anna-gostler/StudyApp.git
 git push -u origin master
 
 
