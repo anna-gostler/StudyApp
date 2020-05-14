@@ -34,3 +34,4 @@ out/
 ### other ###
 notes*.txt
 remove-docker-images.bat
+frontend\node-js-mongodb-connection.js
