@@ -6,11 +6,10 @@
 
 <style>
 
-@import url('https://fonts.googleapis.com/css2?family=Kosugi&display=swap');
-
 :root {
   --knew-it-color: #ABE188;
   --nope-color: #FF8360;
+  --light-gray: #f2f2f2;
 }
 
 html {
@@ -50,7 +49,7 @@ html {
 }
 
 .button {
-  background-color:#f2f2f2;
+  background-color: var(--light-gray);
   margin: 0px;
   border-radius: 0px;
 }

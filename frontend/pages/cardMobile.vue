@@ -1,6 +1,7 @@
 <template>
   <div>
     <Menu />
+    mobile version
     <div class="card-container">
       <div v-if="show">
         <Answer :vocab="currentVocab" />
@@ -73,12 +74,12 @@ export default {
 
 <style lang="scss">
 .card-container {
-  width: 400px;
+  width: 90%;
   margin: auto;
   margin-top: 50px;
   outline: 2px solid black;
   background-color: white;
-  height: 400px;
+  height: 90%;
   display: block;
   text-align: center;
   position: relative;

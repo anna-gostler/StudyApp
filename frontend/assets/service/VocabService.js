@@ -106,7 +106,6 @@ export default class VocabApi {
       if (v !== undefined) {
         v.forEach((vocab) => {
           vocab.duedate = today
-          vocab.addeddate = today
           this.currentVocabs.push(vocab)
           this.update(vocab)
         })

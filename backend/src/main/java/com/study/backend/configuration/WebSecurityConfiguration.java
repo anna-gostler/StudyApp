@@ -25,7 +25,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        boolean DEV = true;
+        boolean DEV = false;
         if (DEV) {
             //no security - permit every request
             http

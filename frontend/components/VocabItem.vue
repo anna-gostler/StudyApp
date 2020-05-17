@@ -19,12 +19,6 @@ export default {
     }
   },
   methods: {
-    // deleteItem () {
-    //  this.$services.vocab.deleteItem(this.vocab.id).then(() => {
-    //    this.$emit('delete', this.vocab)
-    //  })
-    // }
-
   }
 }
 </script>

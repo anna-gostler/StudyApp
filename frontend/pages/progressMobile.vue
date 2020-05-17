@@ -1,17 +1,17 @@
 <template>
   <div>
     <Menu />
-    <vocab-list :vocabs="vocabs" />
+    <vocab-list-mobile :vocabs="vocabs" />
   </div>
 </template>
 
 <script>
-import VocabList from '~/components/VocabList.vue'
+import VocabListMobile from '~/components/VocabListMobile.vue'
 import Menu from '~/components/Menu.vue'
 
 export default {
   components: {
-    VocabList,
+    VocabListMobile,
     Menu
   },
   async asyncData (ctx) {
