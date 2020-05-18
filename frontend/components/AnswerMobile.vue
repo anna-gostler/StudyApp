@@ -1,7 +1,7 @@
 <template>
   <div class="answer-container">
     <div id="answertext" v-html="vocab.english" />
-    <textarea id="note" v-model="vocab.note" rows="9" cols="50" />
+    <textarea id="note" v-model="vocab.note" :rows="rows" cols="50" />
     <div id="progressbar" :style="{ width: ((vocab.progress % 3) / 3)*100 + '%' }" />
   </div>
 </template>
@@ -15,6 +15,9 @@ export default {
       default () {
         return {}
       }
+    },
+    rows: {
+      type: Number
     }
   }
 }
@@ -26,10 +29,11 @@ export default {
   font-size: 20px;
   display: block;
   position: relative;
-  height:400px;
+  //height:400px;
   //height: 320px;
-  //height:56vh;
+  height:56vh;
   padding-top: 50px;
+
 }
 
 #answertext {
@@ -43,7 +47,7 @@ export default {
   resize: none;
   position: absolute;
   left: 10%;
-  bottom: 25%;
+  bottom: 10%;
   padding: 10px;
 }
 

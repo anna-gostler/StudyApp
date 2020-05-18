@@ -4,6 +4,7 @@
     <td>{{ vocab.kanji }} </td>
     <td>{{ vocab.kana }}</td>
     <td>{{ vocab.progress }}</td>
+    <!--<td>{{ vocab.duedate }}</td>-->
   </tr>
 </template>
 

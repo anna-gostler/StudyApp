@@ -1,6 +1,7 @@
 <template>
   <div>
     <Menu />
+    <Charts />
     <vocab-list :vocabs="vocabs" />
   </div>
 </template>
@@ -8,11 +9,13 @@
 <script>
 import VocabList from '~/components/VocabList.vue'
 import Menu from '~/components/Menu.vue'
+import Charts from '~/components/Charts.vue'
 
 export default {
   components: {
     VocabList,
-    Menu
+    Menu,
+    Charts
   },
   async asyncData (ctx) {
     return {

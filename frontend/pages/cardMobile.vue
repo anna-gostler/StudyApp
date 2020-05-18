@@ -1,10 +1,13 @@
 <template>
-  <div>
+  <div :class="{ 'portrait-mode': this.isPortrait }">
     <Menu />
-    mobile version
-    <div class="card-container">
-      <div v-if="show">
-        <Answer :vocab="currentVocab" />
+    <div class="card-container" :class="{'portrait-mode': this.isPortrait}">
+      <div v-if="done">
+        <Done />
+      </div>
+
+      <div v-if="show && !done">
+        <Answer-mobile :vocab="currentVocab" :rows="this.currentRows" />
         <button class="good-button button" @click="answerKnown">
           <img src="../icons/happy.svg" alt="arrow down" width="30px">
         </button>
@@ -12,7 +15,7 @@
           <img src="../icons/confused.svg" alt="arrow down" width="30px">
         </button>
       </div>
-      <div v-if="!show">
+      <div v-if="!show && !done" style="height:100%">
         <Question :vocab="currentVocab" />
         <button class="show-button button" @click="showAnswer">
           <img src="../icons/eye.svg" alt="arrow down" width="30px">
@@ -24,14 +27,16 @@
 
 <script>
 
-import Answer from '~/components/Answer.vue'
+import AnswerMobile from '~/components/AnswerMobile.vue'
 import Question from '~/components/Question.vue'
+import Done from '~/components/Done.vue'
 import Menu from '~/components/Menu.vue'
 
 export default {
   components: {
-    Answer,
+    AnswerMobile,
     Question,
+    Done,
     Menu
   },
   async asyncData (ctx) {
@@ -47,8 +52,24 @@ export default {
       nextVocab: {
         type: Object
       },
-      show: false
+      currentRows: 10,
+      show: false,
+      orientation: this.setOrientation(),
+      isPortrait: true,
+      done: false
     }
+  },
+  beforeMount () {
+    window.addEventListener('resize', this.resizeHandler)
+  },
+  created () {
+    if (this.currentVocab === undefined) {
+      console.log('done')
+      this.done = true
+    }
+  },
+  destroyed () {
+    window.removeEventListener('resize', this.resizeHandler)
   },
   methods: {
     async showAnswer () {
@@ -67,6 +88,26 @@ export default {
     showNextQuestion () {
       this.currentVocab = this.nextVocab
       this.show = false
+      if (this.currentVocab === undefined) {
+        this.done = true
+      }
+    },
+    resizeHandler (e) {
+      this.setOrientation()
+    },
+    setOrientation () {
+      if (process.browser) {
+        console.log('changed screen orientation to: ')
+        console.log(window.innerWidth > window.innerHeight ? 'Landscape' : 'Portrait')
+        if (window.innerWidth > window.innerHeight) {
+          this.isPortrait = false
+          this.currentRows = 3
+        } else {
+          this.isPortrait = true
+          this.currentRows = 10
+        }
+        return window.innerWidth > window.innerHeight ? 'Landscape' : 'Portrait'
+      }
     }
   }
 }
@@ -75,14 +116,19 @@ export default {
 <style lang="scss">
 .card-container {
   width: 90%;
+  height: 90%;
   margin: auto;
   margin-top: 50px;
   outline: 2px solid black;
   background-color: white;
-  height: 90%;
   display: block;
   text-align: center;
   position: relative;
+}
+
+.portrait-mode {
+  height: 70vh;
+  min-height: 70vh;
 }
 
 .button {

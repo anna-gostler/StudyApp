@@ -126,7 +126,7 @@ tr:nth-child(odd) {background-color: #f2f2f2;}
   //margin: auto;
   margin-top: 0px;
   display: block;
-  font-size: 9px;
+  font-size: 10px;
 }
 
 .down {

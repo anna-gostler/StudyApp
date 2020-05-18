@@ -1,10 +1,9 @@
 import Vocab from '~/assets/data/Vocab.class'
 
 const currentVocabs = []
-const maxSizeCurrentWords = 20
-const minRepeatedWords = 10
-const maxWordsAddedPerday = 100
-// const addedToday = 0
+const maxSizeCurrentWords = 10
+const minRepeatedWords = 5
+const maxWordsAddedPerday = 50
 const currentRepeatedWords = 0
 const today = new Date()
 
@@ -16,7 +15,6 @@ export default class VocabApi {
   }
 
   async fillCurrentVocabs () {
-    console.log('constructor: fill current vocabs')
     const result = await Promise.all([this.anyDue(), this.anyUnseen()])
 
     if (result[0]) {
@@ -157,6 +155,7 @@ export default class VocabApi {
 
     return new Promise(function (resolve, reject) {
       if (v !== undefined) {
+        console.log('return from current vocab' + ' english: ' + v.english + ' due: ' + v.duedate)
         resolve(v)
       } else {
         reject(Error('VocabService: could not get word from currentVocabs.'))
@@ -202,17 +201,9 @@ export default class VocabApi {
     }).then((response) => {
       const vocabs = []
       response.data.forEach((vocab) => {
-        vocabs.push(new Vocab(
-          vocab.id,
-          vocab.kanji.trim(),
-          vocab.kana.trim(),
-          vocab.type.trim(),
-          vocab.english.trim().toLowerCase(),
-          vocab.note,
-          vocab.duedate,
-          vocab.addeddate,
-          vocab.progress
-        ))
+        vocabs.push(
+          this.responseToVocab(vocab)
+        )
       })
       return vocabs
     })
@@ -227,7 +218,14 @@ export default class VocabApi {
     }).then((response) => {
       const vocabs = []
       if (response.data) {
-        return response.data
+        response.data.forEach((vocab) => {
+          vocabs.push(
+            this.responseToVocab(vocab)
+          )
+        })
+        return vocabs
+      } else {
+        console.log('no random due found')
       }
       return vocabs
     })
@@ -240,7 +238,7 @@ export default class VocabApi {
       withCredentials: true
     }).then((response) => {
       if (response.data) {
-        return this.responseToVocab(response)
+        return this.responseToVocab(response.data)
       } else {
         return undefined
       }
@@ -262,17 +260,19 @@ export default class VocabApi {
   }
 
   findRandomUnseen (number) {
-    console.log('try to get NEW = unseen from database')
     return this.axios({
       method: 'get',
       url: 'vocab/randomunseen/' + number,
       withCredentials: true
     }).then((response) => {
-      console.log('response.data' + response.data)
-
       const vocabs = []
       if (response.data) {
-        return response.data
+        response.data.forEach((vocab) => {
+          vocabs.push(
+            this.responseToVocab(vocab)
+          )
+        })
+        return vocabs
       } else {
         console.log('no random unseen found')
       }
@@ -318,21 +318,57 @@ export default class VocabApi {
     }
   }
 
-  responseToVocab (response) {
-    if (response.data.duedate === undefined) {
-      response.data.duedate = response.data.dueDate
+  responseToVocab (data) {
+    if (data.duedate === undefined) {
+      data.duedate = data.dueDate
+    }
+    if (data.addeddate === undefined && data.addDate !== undefined) {
+      data.addeddate = data.addDate
     }
     return new Vocab(
-      response.data.id,
-      response.data.kanji.trim(),
-      response.data.kana.trim(),
-      response.data.type.trim(),
-      response.data.english.trim().toLowerCase(),
-      response.data.note,
-      response.data.duedate,
-      response.data.addeddate,
-      response.data.progress
+      data.id,
+      data.kanji.trim(),
+      data.kana.trim(),
+      data.type.trim(),
+      data.english.trim().toLowerCase(),
+      data.note,
+      data.duedate,
+      data.addeddate,
+      data.progress
     )
+  }
+
+  /* getter, setter */
+  getMaxWordsAddedPerday () {
+    return maxWordsAddedPerday
+  }
+
+  getMaxSizeCurrentWords () {
+    return maxSizeCurrentWords
+  }
+
+  getMinRepeatedWords () {
+    return minRepeatedWords
+  }
+
+  getCurrentRepeatedWords () {
+    return currentRepeatedWords
+  }
+
+  setMaxWordsAddedPerday (maxWordsAddedPerday) {
+    this.maxWordsAddedPerday = maxWordsAddedPerday
+  }
+
+  setMaxSizeCurrentWords (maxSizeCurrentWords) {
+    this.setMaxSizeCurrentWords = maxSizeCurrentWords
+  }
+
+  setMinRepeatedWords (minRepeatedWords) {
+    this.minRepeatedWords = minRepeatedWords
+  }
+
+  setCurrentRepeatedWords (currentRepeatedWords) {
+    this.currentRepeatedWords = currentRepeatedWords
   }
 
   /* basic database methods */
@@ -353,7 +389,7 @@ export default class VocabApi {
       },
       withCredentials: true
     }).then((response) => {
-      return response.data
+      return this.responseToVocab(response.data)
     })
   }
 
@@ -368,6 +404,9 @@ export default class VocabApi {
   update (vocab) {
     if (vocab.duedate === undefined) {
       vocab.duedate = vocab.dueDate
+    }
+    if (vocab.addeddate === undefined && vocab.addDate !== undefined) {
+      vocab.addeddate = vocab.addDate
     }
 
     return this.axios({
@@ -392,9 +431,10 @@ export default class VocabApi {
         vocab.kanji + ' ' +
         vocab.id +
         ' progress:' + vocab.progress +
-        ' duedate: ' + vocab.duedate
+        ' duedate: ' + vocab.duedate +
+        ' addeddate: ' + vocab.duedate
         )
-        return response.data
+        return this.responseToVocab(response.data)
       } else {
         console.log('Error: could not update vocab ' + vocab.english)
       }

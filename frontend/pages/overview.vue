@@ -1,20 +1,11 @@
 <template>
   <div class="container">
     <router-link v-if="isMobile()" to="/cardmobile" tag="button" class="edit-button">
-      study
+      Level 4
     </router-link>
 
     <router-link v-else to="/card" tag="button" class="edit-button">
-      study
-    </router-link>
-
-    <br>
-    <router-link v-if="isMobile()" to="/progressmobile" tag="button" class="edit-button">
-      progress
-    </router-link>
-
-    <router-link v-else to="/progress" tag="button" class="edit-button">
-      progress
+      Level 4
     </router-link>
   </div>
 </template>
@@ -25,29 +16,14 @@ export default {
   methods: {
     isMobile () {
       if (process.browser) {
-        let hasTouchScreen = false
-        if ('maxTouchPoints' in navigator) {
-          hasTouchScreen = navigator.maxTouchPoints > 0
-        } else if ('msMaxTouchPoints' in navigator) {
-          hasTouchScreen = navigator.msMaxTouchPoints > 0
-        } else {
-          const mQ = window.matchMedia && matchMedia('(pointer:coarse)')
-          if (mQ && mQ.media === '(pointer:coarse)') {
-            hasTouchScreen = !!mQ.matches
-          } else if ('orientation' in window) {
-            hasTouchScreen = true // deprecated, but good fallback
-          } else {
-          // Only as a last resort, fall back to user agent sniffing
-            const UA = navigator.userAgent
-            hasTouchScreen = (
-              /\b(BlackBerry|webOS|iPhone|IEMobile)\b/i.test(UA) ||
-                /\b(Android|Windows Phone|iPad|iPod)\b/i.test(UA)
-            )
-          }
-        }
-        return hasTouchScreen
+        const UA = navigator.userAgent
+        return (
+          /\b(BlackBerry|webOS|iPhone|IEMobile)\b/i.test(UA) ||
+                /\b(Android|Windows Phone|iPad|iPod)\b/i.test(UA))
+      } else {
+        console.log('could not identify device')
+        return false
       }
-      return false
     }
   }
 }

@@ -1,9 +1,16 @@
 <template>
   <div id="menu">
-    <router-link to="/card" tag="div" class="menu-button">
+    <router-link v-if="isMobile()" to="/cardmobile" tag="div" class="menu-button">
       Study
     </router-link>
-    <router-link to="/progress" tag="div" class="menu-button">
+    <router-link v-else to="/card" tag="div" class="menu-button">
+      Study
+    </router-link>
+
+    <router-link v-if="isMobile()" to="/progressmobile" tag="div" class="menu-button">
+      Progress
+    </router-link>
+    <router-link v-else to="/progress" tag="div" class="menu-button">
       Progress
     </router-link>
   </div>
@@ -12,9 +19,23 @@
 <script>
 
 export default {
+  methods: {
+    isMobile () {
+      if (process.browser) {
+        const UA = navigator.userAgent
+        return (
+          /\b(BlackBerry|webOS|iPhone|IEMobile)\b/i.test(UA) ||
+                /\b(Android|Windows Phone|iPad|iPod)\b/i.test(UA))
+      } else {
+        console.log('could not identify device')
+        return false
+      }
+    }
+  }
 }
 
 </script>
+
 <style lang="scss">
 #menu {
   //background-color: var(--knew-it-color);

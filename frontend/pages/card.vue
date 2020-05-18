@@ -2,6 +2,9 @@
   <div>
     <Menu />
     <div class="card-container">
+      <div v-if="done">
+        <Done />
+      </div>
       <div v-if="show">
         <Answer :vocab="currentVocab" />
         <button class="good-button button" @click="answerKnown">
@@ -25,12 +28,14 @@
 
 import Answer from '~/components/Answer.vue'
 import Question from '~/components/Question.vue'
+import Done from '~/components/Done.vue'
 import Menu from '~/components/Menu.vue'
 
 export default {
   components: {
     Answer,
     Question,
+    Done,
     Menu
   },
   async asyncData (ctx) {
@@ -46,7 +51,8 @@ export default {
       nextVocab: {
         type: Object
       },
-      show: false
+      show: false,
+      done: false
     }
   },
   methods: {
@@ -54,6 +60,11 @@ export default {
       console.log('show answer')
       this.show = true
       this.nextVocab = await this.$services.vocab.getNextVocab()
+    },
+    created () {
+      if (this.currentVocab === undefined) {
+        this.done = true
+      }
     },
     answerKnown () {
       this.$services.vocab.correctAnswer(this.currentVocab)
@@ -66,6 +77,9 @@ export default {
     showNextQuestion () {
       this.currentVocab = this.nextVocab
       this.show = false
+      if (this.currentVocab === undefined) {
+        this.done = true
+      }
     }
   }
 }

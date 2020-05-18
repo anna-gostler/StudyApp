@@ -15,9 +15,9 @@ const { JSDOM } = jsdom;
 const DEVMODE = true
 
 // -------------- set up connection to mongodb
-//mongoose.connect('mongodb://localhost:27017/vocabdb', { useNewUrlParser: true });
+mongoose.connect('mongodb://localhost:27017/vocabdb', { useNewUrlParser: true });
 //(as set in heroku backend app > setting > config vars > MONGODB_URI)
-mongoose.connect('mongodb://heroku_n1fdsrdf:7reju4rs54kbtj41oqf54hj37c@ds213665.mlab.com:13665/heroku_n1fdsrdf?retryWrites=false', { useNewUrlParser: true });
+//mongoose.connect('mongodb://heroku_n1fdsrdf:7reju4rs54kbtj41oqf54hj37c@ds213665.mlab.com:13665/heroku_n1fdsrdf?retryWrites=false', { useNewUrlParser: true });
 
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));

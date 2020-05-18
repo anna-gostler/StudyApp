@@ -1,21 +1,5 @@
 <template>
   <div class="vocab-list-container">
-    <!--
-    <div class="dropdown">
-      <p>
-        order by: {{ this.option }}
-      </p>
-      <div class="dropdown-content">
-        <p class="dropdown-option" @click="setOption('progress', 'desc')">
-          progress
-        </p>
-        <p class="dropdown-option" @click="setOption('english', 'asc')">
-          english
-        </p>
-      </div>
-    </div>
-    <br>-->
-
     <div class="table-container">
       <table>
         <thead>
@@ -131,49 +115,6 @@ tr:nth-child(odd) {background-color: #f2f2f2;}
   width: 700px;
   margin: auto;
   margin-top: 50px;
-  display: block;
-}
-
-.dropdown {
-  position: relative;
-  display: inline-block;
-  margin-bottom: 20px;
-  padding: 10px;
-  padding-left: 15px;
-
-  margin-left: 500px;
-  border: solid black 2px;
-  width: 180px;
-  height: 50px;
-}
-
-.dropdown-content {
-  display: none;
-  position: absolute;
-  background-color: white;
-  top: 49px;
-  right: -1.5px;
-  width: 180px;
-  border: solid black 2px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  padding: 10px;
-  padding-top: 10px;
-  z-index: 1;
-  cursor: pointer;
-}
-
-.dropdown-option {
-  padding-top: 5px;
-  padding-left: 5px;
-  padding-bottom: 5px;
-}
-
-.dropdown-option:hover {
-  background-color: var(--knew-it-color);
-  padding-left:-10px;
-}
-
-.dropdown:hover .dropdown-content {
   display: block;
 }
 
