@@ -319,18 +319,45 @@ export default class VocabApi {
   }
 
   responseToVocab (data) {
+    console.log('convert data to vocab ' + data)
+
     if (data.duedate === undefined) {
       data.duedate = data.dueDate
     }
     if (data.addeddate === undefined && data.addDate !== undefined) {
       data.addeddate = data.addDate
     }
+
+    if (data.kanji == null) {
+      data.kanji = ''
+    } else {
+      data.kanji = data.kanji.trim()
+    }
+
+    if (data.kana == null) {
+      data.kana = ''
+    } else {
+      data.kana = data.kana.trim()
+    }
+
+    if (data.type == null) {
+      data.type = ''
+    } else {
+      data.type = data.type.trim()
+    }
+
+    if (data.english == null) {
+      data.english = ''
+    } else {
+      data.english = data.english.trim().toLowerCase()
+    }
+
     return new Vocab(
       data.id,
-      data.kanji.trim(),
-      data.kana.trim(),
-      data.type.trim(),
-      data.english.trim().toLowerCase(),
+      data.kanji,
+      data.kana,
+      data.type,
+      data.english,
       data.note,
       data.duedate,
       data.addeddate,

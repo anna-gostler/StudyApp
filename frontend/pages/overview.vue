@@ -47,9 +47,10 @@ export default {
   font-size: 20px;
   outline: 2px solid black;
   height: 40px;
-  width: 100px;
+  width: 150px;
   margin: 5px;
   cursor: pointer;
+  background-color: var(--knew-it-color);
 }
 
 </style>

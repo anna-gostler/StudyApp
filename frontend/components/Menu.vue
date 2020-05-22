@@ -1,9 +1,9 @@
 <template>
   <div id="menu">
-    <router-link v-if="isMobile()" to="/cardmobile" tag="div" class="menu-button">
+    <router-link v-if="isMobile()" to="/cardmobile" tag="div" class="menu-button menu-button-left">
       Study
     </router-link>
-    <router-link v-else to="/card" tag="div" class="menu-button">
+    <router-link v-else to="/card" tag="div" class="menu-button menu-button-left">
       Study
     </router-link>
 
@@ -44,6 +44,7 @@ export default {
   display: flex;
   justify-content: right;
   height:35px;
+  position: relative;
   }
 
 .menu-button {
@@ -52,5 +53,11 @@ export default {
   font-size: 14px;
   padding: 7px;
   padding-right: 40px;
+  right: 0;
+  position: absolute;
+}
+
+.menu-button-left {
+  right: 80px;
 }
 </style>

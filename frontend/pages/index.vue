@@ -64,15 +64,15 @@ form {
 
 input {
   width: 100%;
-  border: none;
-  border-bottom: 1px black solid;
+  border: 2px black solid;
   background: none;
   height: 50px;
   line-height: 50px;
-  font-size: 24px;
+  font-size: 20px;
   font-family: "Quicksand", "Source Sans Pro", -apple-system, BlinkMacSystemFont,
     "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   font-weight: 300;
+  padding-left: 10px;
   margin-top: 20px;
   margin-bottom: 20px;
   outline: none;

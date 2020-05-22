@@ -40,8 +40,8 @@ html {
   font-family:  "Source Sans Pro", -apple-system, BlinkMacSystemFont,
     "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   display: block;
-  font-weight: 300;
-  font-size: 60px;
+  font-weight: normal;
+  font-size: 40px;
   color: black;
   letter-spacing: 1px;
   margin-top: 20px;
