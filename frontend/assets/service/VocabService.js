@@ -10,43 +10,50 @@ const today = new Date()
 export default class VocabApi {
   constructor ($axios) {
     this.axios = $axios
-    this.currentVocabs = []
-    this.fillCurrentVocabs()
   }
 
   async fillCurrentVocabs () {
-    const result = await Promise.all([this.anyDue(), this.anyUnseen()])
+    const result = await Promise.all([this.anyDue(), this.anyUnseen(), this.countAddedToday()])
 
-    if (result[0]) {
+    const anyDue = result[0]
+    const anyUnseen = result[1]
+    const numAddedToday = result[2]
+    console.log('fill current vocabs')
+    console.log('any due ' + anyDue)
+    console.log('any unseen ' + anyUnseen)
+
+    if (anyDue) {
       // add due vocabs (max minRepeatedWords)
-      this.findRandomDue(minRepeatedWords).then((v) => {
+      this.findRandomDue(Math.min(minRepeatedWords, maxSizeCurrentWords - currentVocabs.length)).then((v) => {
         v.forEach((vocab) => {
           console.log('fill due: ' + vocab.english)
-          this.currentVocabs.push(vocab)
+          currentVocabs.push(vocab)
         })
 
-        if (result[1]) {
+        if (anyUnseen) {
           // fill rest with unseen vocabs
-          this.findRandomUnseen(maxSizeCurrentWords - this.currentVocabs.length).then((v) => {
+          const numAddUnseen = Math.min((maxSizeCurrentWords - currentVocabs.length), (maxWordsAddedPerday - numAddedToday))
+
+          this.findRandomUnseen(numAddUnseen).then((v) => {
             v.forEach((vocab) => {
               console.log('fill unseen: ' + vocab.english)
               vocab.duedate = today
               vocab.addeddate = today
-              this.currentVocabs.push(vocab)
+              currentVocabs.push(vocab)
               this.update(vocab)
             })
           })
         }
       })
-    }
-    if (result[0] === false && result[1] === true) {
+    } else if (anyUnseen) {
       // fill rest with unseen vocabs
-      this.findRandomUnseen(maxSizeCurrentWords - this.currentVocabs.length).then((v) => {
+      const numAddUnseen = Math.min((maxSizeCurrentWords - currentVocabs.length), (maxWordsAddedPerday - numAddedToday))
+      this.findRandomUnseen(numAddUnseen).then((v) => {
         v.forEach((vocab) => {
           console.log('fill unseen: ' + vocab.english)
           vocab.duedate = today
           vocab.addeddate = today
-          this.currentVocabs.push(vocab)
+          currentVocabs.push(vocab)
         })
       })
     }
@@ -57,11 +64,11 @@ export default class VocabApi {
   // unseen vocab
   async getNextVocab () {
     console.log('---- get next vocab ----')
-    console.log('currentVocabs.length ' + this.currentVocabs.length)
+    console.log('currentVocabs.length ' + currentVocabs.length)
 
-    let conditionRandomDue = currentRepeatedWords < minRepeatedWords && this.currentVocabs.length < maxSizeCurrentWords
-    let conditionRandomUnseen = this.currentVocabs.length < maxSizeCurrentWords
-    const conditionGetFromCurrentVocabs = this.currentVocabs.length > 0
+    let conditionRandomDue = currentRepeatedWords < minRepeatedWords && currentVocabs.length < maxSizeCurrentWords
+    let conditionRandomUnseen = currentVocabs.length < maxSizeCurrentWords
+    const conditionGetFromCurrentVocabs = currentVocabs.length > 0
 
     const result = await Promise.all([this.anyDue(), this.anyUnseen(), this.countAddedToday()])
 
@@ -104,7 +111,7 @@ export default class VocabApi {
       if (v !== undefined) {
         v.forEach((vocab) => {
           vocab.duedate = today
-          this.currentVocabs.push(vocab)
+          currentVocabs.push(vocab)
           this.update(vocab)
         })
       }
@@ -131,7 +138,7 @@ export default class VocabApi {
         v.forEach((vocab) => {
           vocab.duedate = today
           vocab.addeddate = today
-          this.currentVocabs.push(vocab)
+          currentVocabs.push(vocab)
           this.update(vocab)
         })
       }
@@ -149,9 +156,9 @@ export default class VocabApi {
   }
 
   getFromCurrentVocabs () {
-    const rand = Math.floor(Math.random() * this.currentVocabs.length)
-    this.newVocab = this.currentVocabs[rand]
-    const v = this.currentVocabs[rand]
+    const rand = Math.floor(Math.random() * currentVocabs.length)
+    this.newVocab = currentVocabs[rand]
+    const v = currentVocabs[rand]
 
     return new Promise(function (resolve, reject) {
       if (v !== undefined) {
@@ -170,6 +177,40 @@ export default class VocabApi {
       withCredentials: true
     }).then((response) => {
       return response.data
+    })
+  }
+
+  countSeen () {
+    return this.axios({
+      method: 'get',
+      url: 'vocab/countseen',
+      withCredentials: true
+    }).then((response) => {
+      return response.data
+    })
+  }
+
+  countTotal () {
+    return this.axios({
+      method: 'get',
+      url: 'vocab/counttotal',
+      withCredentials: true
+    }).then((response) => {
+      return response.data
+    })
+  }
+
+  countDue () {
+    return this.axios({
+      method: 'get',
+      url: 'vocab/countdue',
+      withCredentials: true
+    }).then((response) => {
+      if (response.data) {
+        return response.data
+      } else {
+        return undefined
+      }
     })
   }
 
@@ -245,21 +286,8 @@ export default class VocabApi {
     })
   }
 
-  countDue () {
-    return this.axios({
-      method: 'get',
-      url: 'vocab/countdue',
-      withCredentials: true
-    }).then((response) => {
-      if (response.data) {
-        return response.data
-      } else {
-        return undefined
-      }
-    })
-  }
-
   findRandomUnseen (number) {
+    // if (number > 0) {
     return this.axios({
       method: 'get',
       url: 'vocab/randomunseen/' + number,
@@ -278,11 +306,14 @@ export default class VocabApi {
       }
       return vocabs
     })
+    // } else {
+    //  return []
+    // }
   }
 
   correctAnswer (vocab) {
-    this.moveDueDateForward(vocab)
     vocab.progress = vocab.progress + 1
+    this.moveDueDateForward(vocab)
     this.update(vocab)
   }
 
@@ -312,15 +343,21 @@ export default class VocabApi {
       // remove from currentVocabs
       for (let i = 0; i < currentVocabs.length; i++) {
         if (currentVocabs[i].id === vocab.id) {
+          console.log('remove from current vocabs ' + vocab.english)
           currentVocabs.splice(i, 1)
+          i--
+          // break //potentially remove doubles
         }
       }
+
+      console.log('after removing: ' + currentVocabs.length)
+
+      // after removing a word add a new one to current vocabs
+      this.fillCurrentVocabs()
     }
   }
 
   responseToVocab (data) {
-    console.log('convert data to vocab ' + data)
-
     if (data.duedate === undefined) {
       data.duedate = data.dueDate
     }
@@ -380,6 +417,10 @@ export default class VocabApi {
 
   getCurrentRepeatedWords () {
     return currentRepeatedWords
+  }
+
+  getCurrentVocabs () {
+    return currentVocabs
   }
 
   setMaxWordsAddedPerday (maxWordsAddedPerday) {
@@ -459,7 +500,7 @@ export default class VocabApi {
         vocab.id +
         ' progress:' + vocab.progress +
         ' duedate: ' + vocab.duedate +
-        ' addeddate: ' + vocab.duedate
+        ' addeddate: ' + vocab.addeddate
         )
         return this.responseToVocab(response.data)
       } else {

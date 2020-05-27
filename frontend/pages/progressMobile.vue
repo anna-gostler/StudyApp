@@ -1,6 +1,7 @@
 <template>
   <div>
     <Menu />
+    <Charts-mobile />
     <vocab-list-mobile :vocabs="vocabs" />
   </div>
 </template>
@@ -8,11 +9,13 @@
 <script>
 import VocabListMobile from '~/components/VocabListMobile.vue'
 import Menu from '~/components/Menu.vue'
+import ChartsMobile from '~/components/ChartsMobile.vue'
 
 export default {
   components: {
     VocabListMobile,
-    Menu
+    Menu,
+    ChartsMobile
   },
   async asyncData (ctx) {
     return {

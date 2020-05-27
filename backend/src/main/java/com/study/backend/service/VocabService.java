@@ -102,13 +102,25 @@ public class VocabService {
         return vocabRepository.existsQuery(dynamicQuery); 
     }
 
+    /* seen vocabs */
+    public int countSeen() {
+        DynamicQuery dynamicQuery = new DynamicQuery();
+		dynamicQuery.setSeenFilter("seen");     
+        return vocabRepository.count(dynamicQuery);
+    }
+
+    /* total vocabs */
+    public long countTotal() {
+        return vocabRepository.count();
+    }
+
    /* added today */
 
     public int countAddedToday() {
         Date today = new Date(); 
         DynamicQuery dynamicQuery = new DynamicQuery();
 		dynamicQuery.setAddedDateFilter(today);     
-        return vocabRepository.countAddedToday(dynamicQuery);
+        return vocabRepository.count(dynamicQuery);
     }
 
     public List<Vocab> findAllAddedToday() {

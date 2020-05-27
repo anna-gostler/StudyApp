@@ -1,10 +1,10 @@
 <template>
   <tr>
-    <td>{{ vocab.english }}</td>
+    <td><div v-html="vocab.english" /></td>
     <td>{{ vocab.kanji }} </td>
     <td>{{ vocab.kana }}</td>
     <td>{{ vocab.progress }}</td>
-    <!--<td>{{ vocab.duedate }}</td>-->
+    <!--<td>{{ vocab.addeddate }}</td>-->
   </tr>
 </template>
 

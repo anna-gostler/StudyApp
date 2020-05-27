@@ -8,19 +8,25 @@
       <div v-if="show">
         <Answer :vocab="currentVocab" />
         <button class="good-button button" @click="answerKnown">
-          <img src="../icons/happy.svg" alt="arrow down" width="30px">
+          <img src="../icons/happy.svg" alt="i know it" width="30px">
         </button>
         <button class="bad-button button" @click="answerNotKnown">
-          <img src="../icons/confused.svg" alt="arrow down" width="30px">
+          <img src="../icons/confused.svg" alt="i don't know" width="30px">
         </button>
       </div>
       <div v-if="!show">
         <Question :vocab="currentVocab" />
         <button class="show-button button" @click="showAnswer">
-          <img src="../icons/eye.svg" alt="arrow down" width="30px">
+          <img src="../icons/eye.svg" alt="show answer" width="30px">
         </button>
       </div>
     </div>
+
+    <ol id="example-1" :style="{'display':'none'}">
+      <li v-for="c in currentVocabs" :key="c.id">
+        {{ c.english }} {{ c.duedate }} progress: {{ c.progress }}
+      </li>
+    </ol>
   </div>
 </template>
 
@@ -40,7 +46,8 @@ export default {
   },
   async asyncData (ctx) {
     return {
-      currentVocab: await ctx.app.$services.vocab.getNextVocab()
+      currentVocab: await ctx.app.$services.vocab.getNextVocab(),
+      currentVocabs: await ctx.app.$services.vocab.getCurrentVocabs() // TEST
     }
   },
   data () {
@@ -55,11 +62,15 @@ export default {
       done: false
     }
   },
+  async beforeMount () {
+    await this.$services.vocab.fillCurrentVocabs()
+  },
   methods: {
     async showAnswer () {
       console.log('show answer')
       this.show = true
       this.nextVocab = await this.$services.vocab.getNextVocab()
+      this.currentVocabs = await this.$services.vocab.getCurrentVocabs() // TEST
     },
     created () {
       if (this.currentVocab === undefined) {
@@ -87,12 +98,12 @@ export default {
 
 <style lang="scss">
 .card-container {
-  width: 400px;
+  width: 500px;
   margin: auto;
   margin-top: 50px;
   outline: 2px solid black;
   background-color: white;
-  height: 400px;
+  height: 500px;
   display: block;
   text-align: center;
   position: relative;

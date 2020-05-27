@@ -113,7 +113,7 @@ th {
   text-align: left;
   background-color: var(--knew-it-color);
   font-weight: normal;
-  height: 30px;
+  height: 44px;
 }
 
 .narrow-column {
@@ -124,25 +124,25 @@ tr:nth-child(odd) {background-color: #f2f2f2;}
 .vocab-list-container {
   width: 100%;
   //margin: auto;
-  margin-top: 0px;
+  margin-top: 50px;
   display: block;
-  font-size: 10px;
+  font-size: 14px;
 }
 
 .down {
   transform: rotate(-90deg);
   position: absolute;
-  top: 11px;
+  top: 18px;
   //margin-left: 5px;
-  width: 10px;
+  width: 18px;
 }
 
 .up {
   transform: rotate(90deg);
   position: absolute;
-  top: 11px;
-  margin-left: 12px;
-  width: 10px;
+  top: 17px;
+  margin-left: 15px;
+  width: 18px;
 }
 
 .svg-container {

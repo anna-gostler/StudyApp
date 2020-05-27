@@ -1,7 +1,7 @@
 <template>
   <div class="question-container">
     <p v-html="vocab.kana" />
-    <p v-html="vocab.kanji" />
+    <p :class="{ kanji: vocab.type === 'kanji' }" v-html="vocab.kanji" />
   </div>
 </template>
 
@@ -20,6 +20,11 @@ export default {
 </script>
 
 <style lang="scss">
+
+.kanji {
+  font-size: 60px;
+  margin-top: 20px;
+}
 
 .question-container {
   font-family: 'Kosugi', 'MS Gothic', sans-serif;

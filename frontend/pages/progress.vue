@@ -1,7 +1,7 @@
 <template>
   <div>
     <Menu />
-    <Charts />
+    <Charts :fontsize="12" />
     <vocab-list :vocabs="vocabs" />
   </div>
 </template>

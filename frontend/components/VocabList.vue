@@ -6,7 +6,7 @@
           <tr>
             <th>
               <div class="svg-container">
-                english
+                meaning
                 <img src="../icons/arrow.svg" alt="arrow up" width="20px" class="up" @click="setOption('english', 'desc')">
                 <img src="../icons/arrow.svg" alt="arrow down" width="20px" class="down" @click="setOption('english', 'asc')">
               </div>

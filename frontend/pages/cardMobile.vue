@@ -22,6 +22,13 @@
         </button>
       </div>
     </div>
+    <!--
+    <ol id="example-1">
+      <li v-for="c in currentVocabs" :key="c.id" :style="{'display':'none'}">
+        {{ c.english }} {{ c.duedate }} progress: {{ c.progress }}
+      </li>
+    </ol>
+    -->
   </div>
 </template>
 
@@ -42,6 +49,7 @@ export default {
   async asyncData (ctx) {
     return {
       currentVocab: await ctx.app.$services.vocab.getNextVocab()
+      // currentVocabs: await ctx.app.$services.vocab.getCurrentVocabs() // TEST
     }
   },
   data () {
@@ -59,8 +67,9 @@ export default {
       done: false
     }
   },
-  beforeMount () {
+  async beforeMount () {
     window.addEventListener('resize', this.resizeHandler)
+    await this.$services.vocab.fillCurrentVocabs()
   },
   created () {
     if (this.currentVocab === undefined) {
@@ -76,6 +85,7 @@ export default {
       console.log('show answer')
       this.show = true
       this.nextVocab = await this.$services.vocab.getNextVocab()
+      // this.currentVocabs = await this.$services.vocab.getCurrentVocabs() // TEST
     },
     answerKnown () {
       this.$services.vocab.correctAnswer(this.currentVocab)

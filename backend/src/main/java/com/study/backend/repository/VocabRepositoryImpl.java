@@ -60,7 +60,9 @@ public class VocabRepositoryImpl implements VocabRepositoryCustom {
 				Criteria.where("addeddate")
 					.gt(LocalDate.parse(dateStr, dtf).atStartOfDay())
 			);
+			
 		}
+
 
 		if(!criteria.isEmpty()) {
 			query.addCriteria(new Criteria().andOperator(criteria.toArray(new Criteria[criteria.size()])));
@@ -70,9 +72,11 @@ public class VocabRepositoryImpl implements VocabRepositoryCustom {
 
 	
 	@Override
-	public int countAddedToday(DynamicQuery dynamicQuery) {
+	public int count(DynamicQuery dynamicQuery) {
 		final Query query = new Query();
 		final List<Criteria> criteria = new ArrayList<>();
+
+		// count added today
 		if(dynamicQuery.getAddedDateFilter() != null) {
 
 			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -84,14 +88,38 @@ public class VocabRepositoryImpl implements VocabRepositoryCustom {
                 Criteria 
 				.where("addeddate")
 				//.lte(LocalDate.parse(dateStr, dtf).plusDays(1))  
-				.gt(LocalDate.parse(dateStr, dtf).atStartOfDay())
+				.gt(LocalDate.parse(dateStr, dtf).atStartOfDay()) // ok?
 			);
 		}
+
+		// count words that are due today (i.e. duedate = today or before)
+		if(dynamicQuery.getDueDateFilter() != null) {
+
+			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+			String pattern = "yyyy-MM-dd";
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+			String dateStr = simpleDateFormat.format(dynamicQuery.getAddedDateFilter());
+
+			criteria.add(
+                Criteria 
+				.where("duedate")
+				.lte(LocalDate.parse(dateStr, dtf).plusDays(1).atStartOfDay())  
+			);
+		}
+
+		// count words that have been shown to the user before i.e. where addeddate is not null
+		if(dynamicQuery.getSeenFilter() != null) {
+			criteria.add(
+				Criteria 
+				.where("addeddate")
+				.ne(null) 
+			);
+		}
+
 		if(!criteria.isEmpty()) {
 			query.addCriteria(new Criteria().andOperator(criteria.toArray(new Criteria[criteria.size()])));
 		}
 
-		//List<Vocab> result = mongoTemplate.find(query, Vocab.class);
 		return (int) mongoTemplate.count(query, Vocab.class);
 	}
 

@@ -21,7 +21,6 @@ export default {
           /\b(BlackBerry|webOS|iPhone|IEMobile)\b/i.test(UA) ||
                 /\b(Android|Windows Phone|iPad|iPod)\b/i.test(UA))
       } else {
-        console.log('could not identify device')
         return false
       }
     }

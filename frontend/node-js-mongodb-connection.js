@@ -15,15 +15,16 @@ const { JSDOM } = jsdom;
 const DEVMODE = true
 
 // -------------- set up connection to mongodb
-mongoose.connect('mongodb://localhost:27017/vocabdb', { useNewUrlParser: true });
+url = 'mongodb://localhost:27017/vocabdb'
 //(as set in heroku backend app > setting > config vars > MONGODB_URI)
-//mongoose.connect('mongodb://heroku_n1fdsrdf:7reju4rs54kbtj41oqf54hj37c@ds213665.mlab.com:13665/heroku_n1fdsrdf?retryWrites=false', { useNewUrlParser: true });
+//url = 'mongodb://heroku_n1fdsrdf:7reju4rs54kbtj41oqf54hj37c@ds213665.mlab.com:13665/heroku_n1fdsrdf?retryWrites=false'
+mongoose.connect(url, { useNewUrlParser: true });
 
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
  
 db.once('open', function() {
-  console.log("Connection Successful!");
+  console.log("Connection to " +url +" Successful!");
 
 
 const vocabSchema = new mongoose.Schema({
@@ -33,7 +34,7 @@ const vocabSchema = new mongoose.Schema({
   english: String,
   note: String, 
   duedate: Date,
-  addedDate: Date,
+  addeddate: Date,
   progress: Number 
 })
 const Vocab = mongoose.model('Vocab', vocabSchema)
@@ -46,6 +47,28 @@ if (deleteEverything) {
     console.log("Successful deletion");
   });
 }
+
+reset = false;
+if (reset) {
+  Vocab.updateMany({}, {$set: {duedate: undefined}}, function (err) {
+    if(err) console.log(err);
+    console.log("Successful reset duedate");
+  });
+  Vocab.updateMany({}, {$set: {addeddate: undefined}}, function (err) {
+    if(err) console.log(err);
+    console.log("Successful reset addeddate");
+  });
+  Vocab.updateMany({}, {$set: {progress: 0}}, function (err) {
+    if(err) console.log(err);
+    console.log("Successful reset progress");
+  });
+}
+
+Vocab.findOne({}, function(err, result) {
+  if (err) throw err;
+  console.log(result);
+  db.close();
+});
 
 if (true) {
 // -------------- fill database with test data
@@ -102,10 +125,14 @@ async.eachSeries(urls, function(url, done) {
             addeddate: null,
             progress: 0 
           })
+
+          // only save if vocab contains values
+          if(v.english != undefined && v.english.trim() != "" ){
+            v.save(function (err, v) {
+              if (err) { return console.error(err) }
+              })
+          }
   
-          v.save(function (err, v) {
-          if (err) { return console.error(err) }
-          })
 
         }else if(url.includes('kanji') ){
           const _kanji = row.querySelectorAll('td')[1].textContent;
@@ -115,6 +142,8 @@ async.eachSeries(urls, function(url, done) {
           const kunyomi = row.querySelectorAll('td')[3].querySelectorAll('a')[0].querySelectorAll('p')[0].textContent;
           const _english = row.querySelectorAll('td')[4].textContent + '</br>' + onyomi + '</br>' + kunyomi;
         
+
+          console.log('create' + _english )
           v = new Vocab({ 
             kanji: _kanji,
             kana: _kana,
@@ -163,6 +192,7 @@ async.eachSeries(urls, function(url, done) {
     throw err;
   }
   console.log("All requests are done");
+
 });
 
 
@@ -176,3 +206,4 @@ Vocab.find(function (err, vocabs) {
     if (err) { return console.error(err) }
     console.log(vocabs)
 })*/
+

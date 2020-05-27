@@ -2,6 +2,11 @@
   <div class="answer-container">
     <div id="answertext" v-html="vocab.english" />
     <textarea id="note" v-model="vocab.note" rows="9" cols="50" />
+    <div class="link-container">
+      <a :href="'https://jisho.org/search/' + linkTo" target="_blank" rel="noopener noreferrer">
+        <img id="jisho-link" src="../icons/jisho-neutral.png" alt="jisho link">
+      </a>
+    </div>
     <div id="progressbar" :style="{ width: ((vocab.progress % 3) / 3)*100 + '%' }" />
   </div>
 </template>
@@ -16,6 +21,19 @@ export default {
         return {}
       }
     }
+  },
+  computed: {
+    linkTo () {
+      if (this.vocab.kanji !== undefined && this.vocab.kanji.trim() !== '') {
+        return this.vocab.kanji
+      } else if (this.vocab.kana !== undefined && this.vocab.kana.trim() !== '') {
+        return this.vocab.kana
+      } else if (this.vocab.english !== undefined && this.vocab.english.trim() !== '') {
+        return this.vocab.english
+      } else {
+        return ''
+      }
+    }
   }
 }
 </script>
@@ -26,10 +44,14 @@ export default {
   font-size: 20px;
   display: block;
   position: relative;
-  height:400px;
-  //height: 320px;
-  //height:56vh;
-  padding-top: 50px;
+  height:500px;
+  padding-top: 35px;
+}
+
+.link-container {
+    position: absolute;
+    top: 72%;
+    right: 50px;
 }
 
 #answertext {
@@ -43,8 +65,13 @@ export default {
   resize: none;
   position: absolute;
   left: 10%;
-  bottom: 25%;
+  bottom: 30%;
   padding: 10px;
+}
+
+#jisho-link {
+  width:42px;
+  border:0;
 }
 
 #progressbar {
@@ -52,7 +79,7 @@ export default {
   background-color:  #ABE188;
   position: absolute;
   left: 0;
-  bottom: 0px;
+  bottom: 20%;
 }
 
 </style>

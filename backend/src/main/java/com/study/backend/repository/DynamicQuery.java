@@ -6,9 +6,20 @@ public class DynamicQuery {
     private Date dueDateFilter;  
     private Date addedDateFilter;  
     private String englishFilter;  
+    private String allFilter;
+    private String seenFilter;
+
 
     public void setDueDateFilter(Date filter){
         this.dueDateFilter = filter;
+    }
+
+    public void setSeenFilter(String filter){
+        this.seenFilter = filter;
+    }
+
+    public String getSeenFilter(){
+        return seenFilter;
     }
 
     public Date getDueDateFilter(){
@@ -27,7 +38,15 @@ public class DynamicQuery {
         this.englishFilter = filter;
     }
 
+    public void setAllFilter(String filter){
+        this.allFilter = filter;
+    }
+
     public String getEnglishFilter(){
         return englishFilter;
+    }
+    
+    public String getAllFilter(){
+        return allFilter;
     }
 }

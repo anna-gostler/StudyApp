@@ -64,7 +64,16 @@ public class VocabController {
         return vocabService.countAddedToday();
     }
 
-    
+    @GetMapping("/counttotal")
+    public long countTotal(){
+        return vocabService.countTotal();
+    }
+
+    @GetMapping("/countseen")
+    public int countSeen(){
+        return vocabService.countSeen();
+    }
+
     @GetMapping("/alladdedtoday")
     public List<Vocab> findAllAddedToday(){
         return vocabService.findAllAddedToday();

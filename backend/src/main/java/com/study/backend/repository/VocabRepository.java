@@ -11,6 +11,7 @@ public interface VocabRepository extends MongoRepository<Vocab, String>, VocabRe
     List<Vocab> findByEnglish(String english);// will be auto-implemented by Spring
     List<Vocab> findByDuedateBefore(Date duedate);    
     List<Vocab> findByAddeddate(Date addedDate);
+    long count();
 }
 
 

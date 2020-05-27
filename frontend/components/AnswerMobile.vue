@@ -2,6 +2,11 @@
   <div class="answer-container">
     <div id="answertext" v-html="vocab.english" />
     <textarea id="note" v-model="vocab.note" :rows="rows" cols="50" />
+    <div class="link-container">
+      <a :href="'https://jisho.org/search/' + linkTo" target="_blank" rel="noopener noreferrer">
+        <img id="jisho-link" src="../icons/jisho-neutral.png" alt="jisho link">
+      </a>
+    </div>
     <div id="progressbar" :style="{ width: ((vocab.progress % 3) / 3)*100 + '%' }" />
   </div>
 </template>
@@ -19,6 +24,19 @@ export default {
     rows: {
       type: Number
     }
+  },
+  computed: {
+    linkTo () {
+      if (this.vocab.kanji !== undefined && this.vocab.kanji.trim() !== '') {
+        return this.vocab.kanji
+      } else if (this.vocab.kana !== undefined && this.vocab.kana.trim() !== '') {
+        return this.vocab.kana
+      } else if (this.vocab.english !== undefined && this.vocab.english.trim() !== '') {
+        return this.vocab.english
+      } else {
+        return ''
+      }
+    }
   }
 }
 </script>
@@ -33,7 +51,12 @@ export default {
   //height: 320px;
   height:56vh;
   padding-top: 50px;
+}
 
+.link-container {
+    position: absolute;
+    top: 91%;
+    right: 50px;
 }
 
 #answertext {
@@ -49,6 +72,11 @@ export default {
   left: 10%;
   bottom: 10%;
   padding: 10px;
+}
+
+#jisho-link {
+  width:42px;
+  border:0;
 }
 
 #progressbar {

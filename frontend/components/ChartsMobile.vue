@@ -1,7 +1,7 @@
 <template>
   <div class="charts-container">
     <div id="addedTodayContainer">
-      {{ addedToday }} words added today / {{ maxAddedToday }} maximum number of words added per day
+      {{ addedToday }} words added today / {{ maxAddedToday }}
       <div class="total" />
       <div class="part" :style="{ width: ((addedToday/maxAddedToday)*100) + '%' }" />
     </div>
@@ -22,17 +22,7 @@
 
 <script>
 
-// TODO use fontsize prop
-
 export default {
-  props: {
-    fontsize: {
-      type: Number,
-      default () {
-        return 10
-      }
-    }
-  },
   data () {
     return {
       addedToday: {
@@ -67,28 +57,31 @@ export default {
 <style lang="scss">
 
 .charts-container {
-  height: 170px;
+  height: 120px;
   margin-bottom: 10px;
-  width: 700px;
+  width: 100%;
   margin: auto;
-
 }
+
 #addedTodayContainer {
   position: relative;
   width: 100%;
-  margin-top:20px;
+  margin-top:15px;
+  height: 10px;
 }
 
 #seenContainer {
   position: relative;
   width: 100%;
-  margin-top:50px;
+  margin-top:40px;
+  height: 10px;
 }
 
 #dueContainer {
   position: relative;
   width: 100%;
-  margin-top: 50px;
+  margin-top: 40px;
+  height: 10px;
 }
 
 .part {
